@@ -31,11 +31,17 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(100, 105, 115, 0.25);
+    background: rgba(100, 105, 115, 0.22);
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(100, 105, 115, 0.45);
+    background: rgba(100, 105, 115, 0.42);
+  }
+
+  /* Accessible focus indicators */
+  :focus-visible {
+    outline: 2px solid #C27803;
+    outline-offset: 2px;
   }
 }
 
@@ -53,27 +59,55 @@
     box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.4);
   }
 
-  /* Subtle glassmorphism */
+  /* Subtle glassmorphism with light catch */
   .glass-nav-light {
-    background-color: rgba(245, 245, 242, 0.82);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(245, 245, 242, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   }
 
   .glass-nav-dark {
-    background-color: rgba(16, 18, 20, 0.82);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(16, 18, 20, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Edge light-catch representation for physical materials */
+  .light-catch-edge {
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .light-catch-edge-light {
+    border-top: 1px solid rgba(255, 255, 255, 0.9);
   }
 
   /* Monospace badge */
   .tag-mono {
     font-family: "JetBrains Mono", monospace;
     font-size: 0.6875rem;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
+  }
+
+  /* Apple-inspired spring tactile response on press */
+  .btn-spring {
+    transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), box-shadow 120ms ease, background-color 150ms ease;
+  }
+  .btn-spring:active {
+    transform: scale(0.972);
+  }
+
+  /* Optical Typography Classes */
+  .tracking-display {
+    letter-spacing: -0.032em;
+  }
+  .tracking-title {
+    letter-spacing: -0.022em;
+  }
+  .tracking-body {
+    letter-spacing: -0.011em;
   }
 }
 
@@ -86,5 +120,19 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Reduced transparency accessibility */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-nav-light {
+    background-color: #F5F5F2 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .glass-nav-dark {
+    background-color: #101214 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }

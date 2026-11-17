@@ -59,7 +59,7 @@ const RAM_TIERS = [
     models: ['llama3.2:1b', 'llama3.2:3b', 'qwen2.5:3b'],
     context: '4,096 tokens',
     latency: '~45 ms / token',
-    note: 'Zero swapping on ultrabooks and standard consumer laptops.',
+    note: 'Zero memory swapping on ultrabooks and standard consumer laptops.',
   },
   {
     tier: '16 GB RAM / 8 GB VRAM',
@@ -79,15 +79,36 @@ const RAM_TIERS = [
   },
 ];
 
+const PRESET_QUERIES = [
+  {
+    label: 'BM25 Latency',
+    query: 'Compare SQLite FTS5 BM25 vs Vector Search latency',
+    response:
+      'SQLite FTS5 delivers sub-5ms query latency using native BM25 term frequency-inverse document frequency ranking [1]. In local benchmarks with up to 100,000 technical documents, BM25 executes in under 4ms on consumer CPUs with zero GPU VRAM consumption, whereas dense vector embeddings require 40–120ms and 2GB+ VRAM [2].\n\nCitations:\n[1] SQLite FTS5 Extension Documentation (sqlite.org/fts5.html)\n[2] Local SIFRA Retrieval Benchmarks (data/library.db)',
+  },
+  {
+    label: 'SearXNG Sanitization',
+    query: 'How does SearXNG strip tracking cookies from search queries?',
+    response:
+      'The SearXNG Docker container intercepts outbound metasearch queries, sanitizing HTTP headers and stripping UTM tracking parameters, session tokens, and referrer strings [1]. Queries are dispatched across 5 independent public engines, returning normalized JSON payloads to localhost [2].\n\nCitations:\n[1] SearXNG Architecture & Privacy Specification (docs.searxng.org)\n[2] SIFRA Metasearch Adapter (services/searxngService.js)',
+  },
+  {
+    label: 'VRAM Quantization',
+    query: 'How does SIFRA prevent GPU out-of-memory errors?',
+    response:
+      'At startup, SIFRA queries operating system video controllers via Windows CIM or nvidia-smi [1]. Candidate model weights are checked against free VRAM with a 1.5GB safety margin, preventing OS desktop freezing and swap thrashing [2].\n\nCitations:\n[1] System Hardware Diagnostics (services/hardwareService.js)\n[2] Ollama Context Memory Manager',
+  },
+];
+
 export const HardwareApiSection: React.FC = () => {
   const [activeLang, setActiveLang] = useState<Lang>('curl');
   const [copied, setCopied] = useState(false);
   const [selectedTierIdx, setSelectedTierIdx] = useState(1);
 
   // Simulated API Interactive Workbench State
-  const [simQuery, setSimQuery] = useState('Compare SQLite FTS5 BM25 vs Vector Search latency');
+  const [simQuery, setSimQuery] = useState(PRESET_QUERIES[0].query);
   const [isSimulating, setIsSimulating] = useState(false);
-  const [simResponse, setSimResponse] = useState<string | null>(null);
+  const [simResponse, setSimResponse] = useState<string | null>(PRESET_QUERIES[0].response);
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(CODE_EXAMPLES[activeLang].code);
@@ -95,15 +116,21 @@ export const HardwareApiSection: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleRunSimulation = () => {
+  const handleRunSimulation = (queryToRun?: string) => {
+    const q = queryToRun || simQuery;
     setIsSimulating(true);
     setSimResponse(null);
+
+    // Find matched preset response or generate grounded response
+    const matched = PRESET_QUERIES.find((p) => p.query.toLowerCase() === q.toLowerCase());
+    const resultText =
+      matched?.response ||
+      `SIFRA executed dual-channel retrieval for: "${q}" [1]. 12 sanitized results retrieved from SearXNG metasearch and matched against local documents in data/library.db [2]. Grounded response synthesized locally.\n\nCitations:\n[1] SIFRA Search Orchestrator\n[2] Local Knowledge Base`;
+
     setTimeout(() => {
       setIsSimulating(false);
-      setSimResponse(
-        `SQLite FTS5 delivers sub-5ms query latency using native BM25 term frequency-inverse document frequency ranking [1]. In local benchmarks with up to 100,000 technical documents, BM25 executes in under 4ms on consumer CPUs with zero GPU VRAM consumption, whereas dense vector embeddings require 40–120ms and 2GB+ VRAM [2].\n\nCitations:\n[1] SQLite FTS5 Extension Documentation (sqlite.org/fts5.html)\n[2] Local SIFRA Retrieval Benchmarks (data/library.db)`
-      );
-    }, 600);
+      setSimResponse(resultText);
+    }, 450);
   };
 
   return (
@@ -111,32 +138,30 @@ export const HardwareApiSection: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="max-w-3xl mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-surface-border text-content-secondary text-xs font-mono uppercase tracking-widest mb-4 shadow-apple-sm">
-            <span>07</span>
-            <span>•</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-surface-border text-content-secondary text-xs font-mono uppercase tracking-caption mb-4 shadow-apple-sm">
             <span>Technical Infrastructure</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-content-primary mb-6 leading-tight">
-            Hardware Intelligence & Headless API.
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-title text-content-primary mb-6 leading-tight">
+            Hardware Intelligence &amp; Headless API.
           </h2>
-          <p className="text-base sm:text-lg text-content-secondary leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-content-secondary leading-relaxed font-normal tracking-body">
             SIFRA pairs automatic hardware profiling with a standardized REST API, allowing developers
             to integrate local research synthesis into existing scripts, bots, and CI pipelines.
           </p>
         </div>
 
         {/* Part 1: Hardware-Aware Model Recommender */}
-        <div className="rounded-squircle-xl bg-white border border-surface-border shadow-apple-md p-6 sm:p-10 mb-12">
-          <div className="flex items-center justify-between pb-6 border-b border-surface-borderSubtle mb-6">
+        <div className="rounded-squircle-xl bg-white border border-surface-border shadow-apple-md p-6 sm:p-10 mb-12 light-catch-edge-light">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-surface-borderSubtle mb-6">
             <div>
               <span className="tag-mono text-amber font-semibold block mb-1">
                 Subsystem 01 • Memory Profiling
               </span>
-              <h3 className="text-xl sm:text-2xl font-bold text-content-primary">
+              <h3 className="text-xl sm:text-2xl font-bold tracking-title text-content-primary">
                 Hardware-Aware Model Selection
               </h3>
             </div>
-            <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-content-secondary">
+            <div className="flex items-center gap-2 text-xs font-mono text-content-secondary">
               <Cpu className="w-4 h-4 text-amber" />
               <span>Host Controller Inspection</span>
             </div>
@@ -150,13 +175,13 @@ export const HardwareApiSection: React.FC = () => {
                 <button
                   key={tier.tier}
                   onClick={() => setSelectedTierIdx(idx)}
-                  className={`text-left p-4 rounded-squircle-sm border transition-all text-xs font-mono ${
+                  className={`text-left p-4 rounded-squircle-sm border transition-all text-xs font-mono btn-spring ${
                     isSelected
-                      ? 'bg-content-primary text-white border-content-primary shadow-apple-sm'
+                      ? 'bg-content-primary text-white border-content-primary shadow-apple-sm scale-[1.01]'
                       : 'bg-surface-soft text-content-secondary border-surface-border hover:bg-white hover:text-content-primary'
                   }`}
                 >
-                  <div className="font-bold mb-1">{tier.tier}</div>
+                  <div className="font-bold mb-1 tracking-title">{tier.tier}</div>
                   <div className={`text-[11px] ${isSelected ? 'text-white/80' : 'text-content-tertiary'}`}>
                     {tier.category}
                   </div>
@@ -187,8 +212,8 @@ export const HardwareApiSection: React.FC = () => {
                 </span>
               </div>
             </div>
-            <p className="text-content-secondary leading-relaxed">
-              <strong className="text-content-primary">Engineering Note:</strong> {RAM_TIERS[selectedTierIdx].note}
+            <p className="text-content-secondary leading-relaxed tracking-body font-sans text-xs">
+              <strong className="text-content-primary font-semibold">Engineering Note:</strong> {RAM_TIERS[selectedTierIdx].note}
             </p>
           </div>
         </div>
@@ -196,14 +221,14 @@ export const HardwareApiSection: React.FC = () => {
         {/* Part 2: Interactive Developer API & Simulated Preview */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left: Code Viewer */}
-          <div className="lg:col-span-6 rounded-squircle-xl bg-dark text-content-inversePrimary border border-dark-border shadow-apple-dark-md overflow-hidden">
+          <div className="lg:col-span-6 rounded-squircle-xl bg-dark text-content-inversePrimary border border-dark-border shadow-apple-dark-md overflow-hidden light-catch-edge">
             <div className="px-5 py-3.5 bg-dark-graphite border-b border-dark-border flex items-center justify-between">
-              <div className="flex gap-2">
+              <div className="flex gap-1.5">
                 {(['curl', 'python', 'node'] as Lang[]).map((lang) => (
                   <button
                     key={lang}
                     onClick={() => setActiveLang(lang)}
-                    className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
+                    className={`px-3 py-1 text-xs font-mono rounded transition-colors btn-spring ${
                       activeLang === lang
                         ? 'bg-dark-elevated text-amber font-semibold'
                         : 'text-content-inverseTertiary hover:text-white'
@@ -216,7 +241,7 @@ export const HardwareApiSection: React.FC = () => {
 
               <button
                 onClick={handleCopyCode}
-                className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono rounded bg-dark-elevated hover:bg-dark-graphite text-content-inverseSecondary hover:text-white transition-colors"
+                className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono rounded bg-dark-elevated hover:bg-dark-graphite text-content-inverseSecondary hover:text-white transition-colors btn-spring"
                 aria-label="Copy Code Snippet"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -230,18 +255,35 @@ export const HardwareApiSection: React.FC = () => {
           </div>
 
           {/* Right: Simulated Interactive Preview Widget */}
-          <div className="lg:col-span-6 rounded-squircle-xl bg-white border border-surface-border shadow-apple-md p-6">
-            {/* Obligatory Disclaimer Banner */}
-            <div className="px-3 py-1.5 rounded bg-amber-soft border border-amber-border text-amber text-[10px] font-mono uppercase tracking-wider mb-4 font-semibold text-center">
+          <div className="lg:col-span-6 rounded-squircle-xl bg-white border border-surface-border shadow-apple-md p-6 light-catch-edge-light">
+            {/* Disclaimer Banner */}
+            <div className="px-3 py-1.5 rounded bg-amber-soft border border-amber-border text-amber text-[10px] font-mono uppercase tracking-caption mb-4 font-semibold text-center">
               SIMULATED PREVIEW — NOT CONNECTED TO YOUR LOCAL SIFRA INSTANCE
             </div>
 
-            <h4 className="text-base font-bold text-content-primary mb-2">
-              Interactive Search & Answer Simulator
+            <h4 className="text-base font-bold tracking-title text-content-primary mb-2">
+              Interactive Search &amp; Answer Simulator
             </h4>
-            <p className="text-xs text-content-secondary mb-4 leading-relaxed">
+            <p className="text-xs text-content-secondary mb-3 leading-relaxed tracking-body">
               Test how the SIFRA <code>/api/chat</code> endpoint formats queries and attaches source citations.
             </p>
+
+            {/* Quick preset chips */}
+            <div className="flex items-center gap-1.5 mb-3 overflow-x-auto pb-1">
+              <span className="text-[10px] font-mono text-content-tertiary uppercase shrink-0">Try:</span>
+              {PRESET_QUERIES.map((p) => (
+                <button
+                  key={p.label}
+                  onClick={() => {
+                    setSimQuery(p.query);
+                    handleRunSimulation(p.query);
+                  }}
+                  className="px-2.5 py-0.5 rounded-full bg-surface-soft hover:bg-surface-border text-content-secondary hover:text-content-primary text-[11px] font-mono whitespace-nowrap border border-surface-border btn-spring"
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
 
             <div className="space-y-3 font-mono text-xs">
               <div className="flex gap-2">
@@ -250,12 +292,12 @@ export const HardwareApiSection: React.FC = () => {
                   value={simQuery}
                   onChange={(e) => setSimQuery(e.target.value)}
                   placeholder="Enter sample query..."
-                  className="flex-1 px-3 py-2 rounded-md bg-surface-soft border border-surface-border text-content-primary focus:outline-none focus:border-amber"
+                  className="flex-1 px-3 py-2 rounded-md bg-surface-soft border border-surface-border text-content-primary focus:outline-none focus:border-amber text-xs"
                 />
                 <button
-                  onClick={handleRunSimulation}
+                  onClick={() => handleRunSimulation()}
                   disabled={isSimulating}
-                  className="px-4 py-2 rounded-md bg-content-primary text-white font-medium hover:bg-black transition-all flex items-center gap-1.5 shrink-0"
+                  className="px-4 py-2 rounded-md bg-content-primary text-white font-medium hover:bg-black transition-all flex items-center gap-1.5 shrink-0 btn-spring"
                 >
                   {isSimulating ? (
                     <span>Running...</span>
@@ -270,7 +312,7 @@ export const HardwareApiSection: React.FC = () => {
 
               {/* Simulation Result Area */}
               {simResponse && (
-                <div className="mt-4 p-4 rounded-md bg-surface-soft border border-amber-border text-content-primary text-xs leading-relaxed whitespace-pre-wrap animate-fadeIn">
+                <div className="mt-3 p-4 rounded-md bg-surface-soft border border-amber-border text-content-primary text-xs leading-relaxed whitespace-pre-wrap">
                   {simResponse}
                 </div>
               )}

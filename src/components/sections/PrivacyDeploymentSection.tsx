@@ -36,23 +36,21 @@ export const PrivacyDeploymentSection: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="max-w-3xl mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-dark-elevated border border-dark-border text-amber text-xs font-mono uppercase tracking-widest mb-4">
-            <span>08</span>
-            <span>•</span>
-            <span>Security & Deployment</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-dark-elevated border border-dark-border text-amber text-xs font-mono uppercase tracking-caption mb-4">
+            <span>Security &amp; Deployment</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-title text-white mb-6 leading-tight">
             Transparent Boundaries. 5-Minute Local Setup.
           </h2>
-          <p className="text-base sm:text-lg text-content-inverseSecondary leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-content-inverseSecondary leading-relaxed font-normal tracking-body">
             We provide exact architectural transparency regarding what never leaves your computer,
             and how SIFRA safely queries open search engines.
           </p>
         </div>
 
         {/* Part 1: Transparent Architectural Boundary Diagram */}
-        <div className="rounded-squircle-xl bg-dark-graphite border border-dark-border p-6 sm:p-10 shadow-apple-dark-lg mb-16">
-          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2.5">
+        <div className="rounded-squircle-xl bg-dark-graphite border border-dark-border p-6 sm:p-10 shadow-apple-dark-lg mb-16 light-catch-edge">
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2.5 tracking-title">
             <ShieldCheck className="w-5 h-5 text-amber" />
             <span>Data Boundary Architecture</span>
           </h3>
@@ -61,7 +59,7 @@ export const PrivacyDeploymentSection: React.FC = () => {
             {/* Local Zone */}
             <div className="p-6 rounded-squircle-md bg-dark border border-emerald-500/30">
               <div className="flex items-center justify-between pb-3 border-b border-dark-border mb-4">
-                <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
+                <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-caption">
                   100% In-Host / Offline
                 </span>
                 <Server className="w-4 h-4 text-emerald-400" />
@@ -74,7 +72,7 @@ export const PrivacyDeploymentSection: React.FC = () => {
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Neural inference weights & token generation (Ollama).</span>
+                  <span>Neural inference weights &amp; token generation (Ollama).</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
@@ -90,7 +88,7 @@ export const PrivacyDeploymentSection: React.FC = () => {
             {/* Outbound Network Zone */}
             <div className="p-6 rounded-squircle-md bg-dark border border-amber/30">
               <div className="flex items-center justify-between pb-3 border-b border-dark-border mb-4">
-                <span className="text-xs font-mono text-amber font-bold uppercase tracking-wider">
+                <span className="text-xs font-mono text-amber font-bold uppercase tracking-caption">
                   Outbound via SearXNG Only
                 </span>
                 <Globe className="w-4 h-4 text-amber" />
@@ -119,18 +117,18 @@ export const PrivacyDeploymentSection: React.FC = () => {
         </div>
 
         {/* Part 2: Step-by-Step Production Deployment Guide */}
-        <div className="rounded-squircle-xl bg-dark-graphite border border-dark-border p-6 sm:p-10 shadow-apple-dark-lg">
+        <div className="rounded-squircle-xl bg-dark-graphite border border-dark-border p-6 sm:p-10 shadow-apple-dark-lg light-catch-edge">
           <div className="flex items-center justify-between pb-6 border-b border-dark-border mb-8">
             <div>
               <span className="tag-mono text-amber font-semibold block mb-1">
                 Zero Cloud Dependencies
               </span>
-              <h3 className="text-xl sm:text-2xl font-bold text-white">
+              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-title">
                 Launch SIFRA in Three Commands
               </h3>
             </div>
             <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-content-inverseTertiary">
-              <span>Docker & Node.js Ready</span>
+              <span>Docker &amp; Node.js Ready</span>
             </div>
           </div>
 
@@ -144,7 +142,7 @@ export const PrivacyDeploymentSection: React.FC = () => {
                   </div>
                   <button
                     onClick={() => copyCommand(s.cmd, idx)}
-                    className="flex items-center gap-1.5 px-2 py-1 rounded bg-dark-elevated text-content-inverseSecondary hover:text-white transition-colors"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-dark-elevated text-content-inverseSecondary hover:text-white transition-colors btn-spring"
                     aria-label={`Copy Step ${s.step} Command`}
                   >
                     {copiedStep === idx ? (
@@ -155,7 +153,7 @@ export const PrivacyDeploymentSection: React.FC = () => {
                     <span>{copiedStep === idx ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
-                <p className="text-content-inverseTertiary mb-3 font-sans text-xs">{s.desc}</p>
+                <p className="text-content-inverseTertiary mb-3 font-sans text-xs tracking-body">{s.desc}</p>
                 <pre className="p-3 rounded bg-black/60 border border-dark-border text-amber overflow-x-auto">
                   <code>{s.cmd}</code>
                 </pre>

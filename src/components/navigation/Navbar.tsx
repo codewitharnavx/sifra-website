@@ -23,7 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -37,26 +37,26 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
     }
   };
 
-  // Apple-inspired adaptive surface styling
+  // Apple-inspired adaptive surface styling with light-catch edge
   const navSurface = isDarkSection
-    ? 'bg-dark/80 backdrop-blur-xl border-b border-dark-borderSubtle text-content-inversePrimary'
-    : 'bg-surface-warm/85 backdrop-blur-xl border-b border-surface-borderSubtle text-content-primary';
+    ? 'glass-nav-dark light-catch-edge border-b border-dark-borderSubtle text-content-inversePrimary'
+    : 'glass-nav-light border-b border-surface-borderSubtle text-content-primary';
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? `${navSurface} py-3 shadow-apple-sm` : 'bg-transparent py-5'
+        isScrolled ? `${navSurface} py-2.5 shadow-apple-sm` : 'bg-transparent py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand Wordmark */}
+        {/* Brand Wordmark with pointer-down spring feedback */}
         <button
           onClick={() => scrollTo('hero')}
-          className="flex items-center gap-2.5 text-left group focus:outline-none"
+          className="flex items-center gap-2.5 text-left group focus:outline-none btn-spring"
           aria-label="SIFRA Home"
         >
           <div
-            className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono font-bold text-xs transition-colors ${
+            className={`w-7 h-7 rounded-squircle-sm flex items-center justify-center font-mono font-bold text-xs transition-colors ${
               isDarkSection
                 ? 'bg-dark-elevated text-white border border-dark-border'
                 : 'bg-white text-content-primary border border-surface-border shadow-apple-sm'
@@ -66,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
           </div>
           <div className="flex items-center gap-2">
             <span
-              className={`font-semibold tracking-tight text-sm ${
+              className={`font-semibold tracking-title text-sm ${
                 isDarkSection ? 'text-content-inversePrimary' : 'text-content-primary'
               }`}
             >
@@ -74,11 +74,11 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-amber inline-block" />
             <span
-              className={`hidden sm:inline-block text-[11px] font-mono tracking-wider uppercase ${
+              className={`hidden sm:inline-block text-[11px] font-mono tracking-caption uppercase ${
                 isDarkSection ? 'text-content-inverseTertiary' : 'text-content-secondary'
               }`}
             >
-              Local AI Research
+              Autonomous Local AI
             </span>
           </div>
         </button>
@@ -87,8 +87,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
         <nav
           className={`hidden lg:flex items-center gap-1 p-1 rounded-full transition-colors ${
             isDarkSection
-              ? 'bg-dark-graphite/80 border border-dark-borderSubtle'
-              : 'bg-white/80 border border-surface-border shadow-apple-sm'
+              ? 'bg-dark-graphite/80 border border-dark-borderSubtle shadow-apple-dark-sm'
+              : 'bg-white/85 border border-surface-border shadow-apple-sm'
           }`}
         >
           {NAV_LINKS.map((link) => {
@@ -97,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
               <button
                 key={link.id}
                 onClick={() => scrollTo(link.id)}
-                className={`px-3 py-1.5 text-xs font-medium tracking-normal transition-all duration-200 rounded-full ${
+                className={`px-3 py-1 text-xs font-medium tracking-normal rounded-full transition-all duration-200 btn-spring ${
                   isActive
                     ? isDarkSection
                       ? 'bg-dark-elevated text-content-inversePrimary font-semibold shadow-sm'
@@ -119,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
             href="https://github.com/codewitharnavx/SIFRA"
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-medium rounded-full transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-medium rounded-full btn-spring ${
               isDarkSection
                 ? 'bg-dark-elevated hover:bg-dark-graphite text-content-inversePrimary border border-dark-border'
                 : 'bg-white hover:bg-surface-soft text-content-primary border border-surface-border shadow-apple-sm'
@@ -137,7 +137,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
             href="https://github.com/codewitharnavx/SIFRA"
             target="_blank"
             rel="noopener noreferrer"
-            className={`p-2 rounded-lg border ${
+            className={`p-2 rounded-squircle-sm border btn-spring ${
               isDarkSection
                 ? 'bg-dark-elevated text-content-inversePrimary border-dark-border'
                 : 'bg-white text-content-primary border-surface-border shadow-apple-sm'
@@ -148,12 +148,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
           </a>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`p-2 rounded-lg border focus:outline-none ${
+            className={`p-2 rounded-squircle-sm border focus:outline-none btn-spring ${
               isDarkSection
                 ? 'bg-dark-elevated border-dark-border text-content-inverseSecondary'
                 : 'bg-white border-surface-border text-content-secondary shadow-apple-sm'
             }`}
-            aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
+            aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
             aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -161,13 +161,13 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer (Symmetric slide-fade down from origin) */}
       {mobileMenuOpen && (
         <div
-          className={`lg:hidden px-4 pt-3 pb-6 border-b transition-all ${
+          className={`lg:hidden px-4 pt-3 pb-6 border-b transition-all duration-200 ${
             isDarkSection
-              ? 'bg-dark border-dark-border text-content-inversePrimary'
-              : 'bg-surface-warm border-surface-border text-content-primary'
+              ? 'bg-dark/95 backdrop-blur-xl border-dark-border text-content-inversePrimary'
+              : 'bg-surface-warm/95 backdrop-blur-xl border-surface-border text-content-primary'
           }`}
         >
           <div className="flex flex-col space-y-1">
@@ -177,7 +177,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, isDarkSection }) 
                 <button
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
-                  className={`text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
+                  className={`text-left px-4 py-2.5 rounded-lg text-sm transition-colors btn-spring ${
                     isActive
                       ? isDarkSection
                         ? 'bg-dark-elevated text-amber font-semibold'

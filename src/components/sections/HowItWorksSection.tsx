@@ -67,27 +67,29 @@ const STAGES: Stage[] = [
 export const HowItWorksSection: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
 
+  const nextStep = () => {
+    setActiveStep((prev) => (prev + 1) % STAGES.length);
+  };
+
   return (
     <section id="how-it-works" className="relative py-28 px-4 sm:px-6 lg:px-8 bg-surface-paper text-content-primary">
       <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
+        {/* Section Header with Optical Typography */}
         <div className="max-w-3xl mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-surface-border text-content-secondary text-xs font-mono uppercase tracking-widest mb-4 shadow-apple-sm">
-            <span>04</span>
-            <span>•</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-surface-border text-content-secondary text-xs font-mono uppercase tracking-caption mb-4 shadow-apple-sm">
             <span>Execution Lifecycle</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-content-primary mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-title text-content-primary mb-6 leading-tight">
             How Research Transforms into Grounded Answers.
           </h2>
-          <p className="text-base sm:text-lg text-content-secondary leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-content-secondary leading-relaxed font-normal tracking-body">
             From raw input query to cited synthesis, every step occurs transparently on your machine
             in five verifiable stages.
           </p>
         </div>
 
         {/* Interactive Step-by-Step Pipeline Scrubber */}
-        <div className="rounded-squircle-xl bg-white border border-surface-border shadow-apple-md p-6 sm:p-10 mb-8">
+        <div className="rounded-squircle-xl bg-white border border-surface-border shadow-apple-md p-6 sm:p-10 mb-8 light-catch-edge-light">
           {/* Step Track */}
           <div className="grid grid-cols-5 gap-2 sm:gap-4 mb-8 pb-6 border-b border-surface-borderSubtle">
             {STAGES.map((s, idx) => {
@@ -97,19 +99,20 @@ export const HowItWorksSection: React.FC = () => {
                 <button
                   key={s.step}
                   onClick={() => setActiveStep(idx)}
-                  className={`text-left p-2 sm:p-3 rounded-squircle-sm transition-all text-xs font-mono ${
+                  className={`text-left p-2 sm:p-3 rounded-squircle-sm transition-all duration-150 text-xs font-mono btn-spring ${
                     isActive
-                      ? 'bg-content-primary text-white font-semibold shadow-apple-sm'
+                      ? 'bg-content-primary text-white font-semibold shadow-apple-sm scale-[1.01]'
                       : isPast
-                      ? 'bg-surface-soft text-content-primary'
+                      ? 'bg-surface-soft text-content-primary hover:bg-surface-border'
                       : 'text-content-tertiary hover:bg-surface-soft'
                   }`}
+                  aria-label={`Step ${s.step}: ${s.title}`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span>{s.step}</span>
-                    {isPast && <Check className="w-3 h-3 text-emerald-600" />}
+                    <span className="font-bold">{s.step}</span>
+                    {isPast && <Check className="w-3.5 h-3.5 text-emerald-600" />}
                   </div>
-                  <div className="hidden sm:block truncate text-[11px]">{s.title}</div>
+                  <div className="hidden sm:block truncate text-[11px] tracking-tight">{s.title}</div>
                 </button>
               );
             })}
@@ -118,13 +121,23 @@ export const HowItWorksSection: React.FC = () => {
           {/* Active Step Presentation */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7">
-              <span className="tag-mono text-amber font-semibold mb-2 block">
-                Stage {STAGES[activeStep].step} • {STAGES[activeStep].action}
-              </span>
-              <h3 className="text-2xl font-bold text-content-primary mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="tag-mono text-amber font-semibold block">
+                  Stage {STAGES[activeStep].step} • {STAGES[activeStep].action}
+                </span>
+                <button
+                  onClick={nextStep}
+                  className="inline-flex items-center gap-1.5 text-xs font-mono text-content-secondary hover:text-content-primary transition-colors btn-spring"
+                >
+                  <span>Next Step</span>
+                  <ArrowRight className="w-3 h-3 text-amber" />
+                </button>
+              </div>
+
+              <h3 className="text-2xl font-bold tracking-title text-content-primary mb-4">
                 {STAGES[activeStep].title}
               </h3>
-              <p className="text-sm sm:text-base text-content-secondary leading-relaxed mb-6 font-normal">
+              <p className="text-sm sm:text-base text-content-secondary leading-relaxed mb-6 font-normal tracking-body">
                 {STAGES[activeStep].description}
               </p>
 
@@ -135,18 +148,18 @@ export const HowItWorksSection: React.FC = () => {
             </div>
 
             {/* Live Data Simulation Box */}
-            <div className="lg:col-span-5 p-5 rounded-squircle-md bg-surface-soft border border-surface-border font-mono text-xs">
-              <div className="text-[11px] text-content-tertiary uppercase tracking-wider mb-2">
+            <div className="lg:col-span-5 p-5 rounded-squircle-md bg-surface-soft border border-surface-border font-mono text-xs shadow-apple-sm">
+              <div className="text-[10px] text-content-tertiary uppercase tracking-caption mb-1.5">
                 Input Payload
               </div>
-              <div className="p-2.5 rounded bg-white border border-surface-border mb-4 text-content-secondary break-words">
+              <div className="p-2.5 rounded bg-white border border-surface-border mb-3.5 text-content-secondary break-words leading-relaxed">
                 {STAGES[activeStep].inputExample}
               </div>
 
-              <div className="text-[11px] text-content-tertiary uppercase tracking-wider mb-2">
+              <div className="text-[10px] text-content-tertiary uppercase tracking-caption mb-1.5">
                 Processed Output
               </div>
-              <div className="p-2.5 rounded bg-white border border-amber-border text-content-primary font-medium break-words">
+              <div className="p-2.5 rounded bg-white border border-amber-border text-content-primary font-medium break-words leading-relaxed">
                 {STAGES[activeStep].outputExample}
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Monitor, MessageSquare, Layers, Cpu, Database, ExternalLink, ArrowRight } from 'lucide-react';
+import { Monitor, MessageSquare, Layers, Cpu, Database, ExternalLink, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 interface ScreenshotTab {
   id: string;
@@ -91,35 +91,34 @@ export const ProductExperienceSection: React.FC = () => {
   return (
     <section id="product-experience" className="relative py-32 px-4 sm:px-6 lg:px-8 bg-dark text-content-inversePrimary">
       <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
-        <div className="max-w-3xl mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-dark-elevated border border-dark-border text-amber text-xs font-mono uppercase tracking-widest mb-4">
-            <span>06</span>
-            <span>•</span>
+        {/* Section Header with Optical Tracking */}
+        <div className="max-w-3xl mb-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-dark-elevated border border-dark-border text-amber text-xs font-mono uppercase tracking-caption mb-4">
             <span>Actual Product Interface</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-title text-white mb-6 leading-tight">
             The SIFRA Application Experience.
           </h2>
-          <p className="text-base sm:text-lg text-content-inverseSecondary leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-content-inverseSecondary leading-relaxed font-normal tracking-body">
             SIFRA is not a conceptual mockup. It is a fully functioning, beautiful research tool
             running in your browser at <span className="font-mono text-white">localhost:5000</span>.
           </p>
         </div>
 
-        {/* Tab Navigation Controls (Apple Segmented Bar Style) */}
-        <div className="flex items-center gap-1.5 p-1 rounded-squircle-md bg-dark-graphite border border-dark-border mb-8 overflow-x-auto">
+        {/* Apple Segmented Bar Controller */}
+        <div className="flex items-center gap-1.5 p-1.5 rounded-squircle-md bg-dark-graphite border border-dark-border mb-8 overflow-x-auto shadow-apple-dark-sm">
           {TABS.map((tab) => {
             const isActive = activeTabId === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTabId(tab.id)}
-                className={`px-4 py-2 text-xs font-mono uppercase tracking-wider rounded-md whitespace-nowrap transition-all duration-200 ${
+                className={`px-4 py-2 text-xs font-mono uppercase tracking-caption rounded-md whitespace-nowrap transition-all duration-150 btn-spring ${
                   isActive
-                    ? 'bg-dark-elevated text-white font-semibold border border-dark-border shadow-apple-dark-sm'
+                    ? 'bg-dark-elevated text-white font-semibold border border-dark-border shadow-apple-dark-sm scale-[1.01]'
                     : 'text-content-inverseTertiary hover:text-white hover:bg-dark-elevated/50'
                 }`}
+                aria-label={`Show ${tab.label}`}
               >
                 {tab.label}
               </button>
@@ -127,14 +126,14 @@ export const ProductExperienceSection: React.FC = () => {
           })}
         </div>
 
-        {/* Primary Product Showcase Window (Apple Mac Glass Aesthetic) */}
-        <div className="rounded-squircle-xl bg-dark-graphite border border-dark-border shadow-apple-dark-lg overflow-hidden">
-          {/* Window Chrome Header */}
+        {/* Primary Product Showcase Window (Apple macOS Glass Frame) */}
+        <div className="rounded-squircle-xl bg-dark-graphite border border-dark-border shadow-apple-dark-lg overflow-hidden light-catch-edge">
+          {/* macOS Title Bar */}
           <div className="px-5 py-3.5 bg-dark border-b border-dark-border flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
-              <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-              <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+              <div className="w-3 h-3 rounded-full bg-[#FF5F56] shadow-sm" />
+              <div className="w-3 h-3 rounded-full bg-[#FFBD2E] shadow-sm" />
+              <div className="w-3 h-3 rounded-full bg-[#27C93F] shadow-sm" />
               <span className="ml-3 text-xs font-mono text-content-inverseTertiary">
                 SIFRA Workspace • http://localhost:5000
               </span>
@@ -146,12 +145,12 @@ export const ProductExperienceSection: React.FC = () => {
           </div>
 
           {/* Screenshot Presentation Canvas */}
-          <div className="p-4 sm:p-8 bg-dark/60 flex flex-col items-center">
+          <div className="p-4 sm:p-7 bg-dark/60 flex flex-col items-center">
             <div className="w-full rounded-squircle-md overflow-hidden border border-dark-border shadow-apple-dark-md bg-black">
               <img
                 src={activeTab.imageSrc}
                 alt={activeTab.title}
-                className="w-full h-auto object-cover max-h-[640px] transition-opacity duration-300"
+                className="w-full h-auto object-cover max-h-[640px] transition-opacity duration-200"
                 loading="lazy"
               />
             </div>
@@ -159,19 +158,19 @@ export const ProductExperienceSection: React.FC = () => {
             {/* Contextual Detail Bar */}
             <div className="w-full mt-6 pt-6 border-t border-dark-border grid grid-cols-1 md:grid-cols-12 gap-6 items-start text-left">
               <div className="md:col-span-6">
-                <h4 className="text-lg font-bold text-white mb-2">{activeTab.title}</h4>
-                <p className="text-xs sm:text-sm text-content-inverseSecondary leading-relaxed font-normal">
+                <h4 className="text-lg font-bold text-white mb-2 tracking-title">{activeTab.title}</h4>
+                <p className="text-xs sm:text-sm text-content-inverseSecondary leading-relaxed font-normal tracking-body">
                   {activeTab.description}
                 </p>
               </div>
 
-              <div className="md:col-span-6 space-y-2">
-                <span className="text-[11px] font-mono text-content-inverseTertiary uppercase tracking-wider block mb-2">
+              <div className="md:col-span-6 space-y-2.5">
+                <span className="text-[11px] font-mono text-content-inverseTertiary uppercase tracking-caption block mb-1">
                   Key Verification Points
                 </span>
                 {activeTab.highlights.map((h, idx) => (
-                  <div key={idx} className="flex items-start gap-2 text-xs font-mono text-content-inversePrimary">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber mt-1.5 shrink-0" />
+                  <div key={idx} className="flex items-start gap-2.5 text-xs font-mono text-content-inversePrimary">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-amber mt-0.5 shrink-0" />
                     <span>{h}</span>
                   </div>
                 ))}
