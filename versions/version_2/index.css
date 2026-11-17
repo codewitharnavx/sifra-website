@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: #090B0E;
+    color: #FFFFFF;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    letter-spacing: -0.01em;
+  }
+
+  /* Architectural subtle scrollbar */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #090B0E;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1A2027;
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C99A62;
+  }
+}
+
+@layer utilities {
+  .border-hairline {
+    border-color: rgba(255, 255, 255, 0.07);
+  }
+
+  .border-hairline-amber {
+    border-color: rgba(201, 154, 98, 0.25);
+  }
+
+  .bg-surface-graphite {
+    background-color: #11151A;
+  }
+
+  .bg-surface-charcoal {
+    background-color: #191E24;
+  }
+
+  .text-amber-accent {
+    color: #C99A62;
+  }
+
+  /* Museum label style */
+  .technical-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #A4A49D;
+  }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
